@@ -15,5 +15,7 @@ import * as fs from 'fs';
 		}
 		sum += Number(parts[i]);
 	}
-	console.log(result.sort((a, b) => b - a)[0]);
+	result.sort((a, b) => b - a)
+	console.log(result[0]);
+	console.log(result.slice(0, 3).reduce((a, b) => a + b, 0));
 })();
