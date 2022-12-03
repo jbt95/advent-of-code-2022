@@ -10,32 +10,33 @@ pub fn run() {
             .unwrap()
             .lines()
             .collect::<Vec<&str>>()
-            .into_iter()
-            .map(split_arr)
-            .map(|(left, right)| -> (HashSet<char>, HashSet<char>) {
-                (HashSet::from_iter(left), HashSet::from_iter(right))
+            .chunks(3)
+            .map(|(chunk)| {
+                (
+                    chunk[0].chars().collect::<Vec<char>>(),
+                    chunk[1].chars().collect::<Vec<char>>(),
+                    chunk[2].chars().collect::<Vec<char>>(),
+                )
             })
-            .map(|(left, right)| {
-                left.intersection(&right)
-                    .cloned()
-                    .collect::<HashSet<char>>()
+            .map(|(a, b, c)| {
+                return intersection(intersection(a, b).into_iter().collect::<Vec<char>>(), c)
                     .into_iter()
                     .next()
-                    .unwrap()
+                    .unwrap();
             })
             .map(|char| {
                 if char.is_lowercase() {
-                    return char as i32 - 96;
+                    return char as usize - 96;
                 }
-                return char as i32 - 38;
+                return char as usize - 38;
             })
-            .sum::<i32>()
+            .sum::<usize>()
     );
 }
 
-fn split_arr(line: &str) -> (Vec<char>, Vec<char>) {
-    let chars = line.chars().collect::<Vec<char>>();
-    let len = chars.len();
+fn intersection(left: Vec<char>, right: Vec<char>) -> HashSet<char> {
+    let a: HashSet<char> = HashSet::from_iter(left);
+    let b: HashSet<char> = HashSet::from_iter(right);
 
-    return (chars[..len / 2].to_vec(), chars[len / 2..].to_vec());
+    return a.intersection(&b).cloned().collect::<HashSet<char>>();
 }
