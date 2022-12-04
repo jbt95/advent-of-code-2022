@@ -1,3 +1,4 @@
+use std::collections::HashSet;
 use std::fs;
 use std::path::Path;
 
@@ -10,12 +11,14 @@ pub fn run() {
             .into_iter()
             .map(|line| line.split(",").collect::<Vec<&str>>())
             .map(parse_pairs)
-            .map(
-                |(a, b)| match a[0] <= b[0] && a[1] >= b[1] || b[0] <= a[0] && b[1] >= a[1] {
-                    true => 1,
-                    false => 0,
-                },
-            )
+            .map(|(a, b)| -> (HashSet<i32>, HashSet<i32>) {
+                (
+                    HashSet::from_iter((a[0]..=a[1]).collect::<Vec<i32>>()),
+                    HashSet::from_iter((b[0]..=b[1]).collect::<Vec<i32>>()),
+                )
+            })
+            .map(|(a, b)| a.intersection(&b).count() > 0)
+            .map(|res| i32::from(res))
             .sum::<i32>()
     );
 }
