@@ -40,12 +40,9 @@ pub fn run() {
         compute_dir_size(&filesystem, &mut sizes, k);
     }
     let total_size = sizes[&PathBuf::from("/")];
+    println!(" {}", sizes.values().filter(|&&s| s <= 100000).sum::<i32>());
     println!(
-        "Part 1: {}",
-        sizes.values().filter(|&&s| s <= 100000).sum::<i32>()
-    );
-    println!(
-        "Part 1: {}",
+        "{}",
         sizes
             .values()
             .filter(|&&s| 40000000 + s >= total_size)
